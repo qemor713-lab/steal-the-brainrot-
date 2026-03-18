@@ -1,0 +1,32 @@
+{
+  "title": "Steal the Brainrot 🧠",
+  "description": "",
+  "head": "<meta charset=\"UTF-8\" />\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />",
+  "htmlAttrs": "lang=\"en\" class=\"\"",
+  "tags": [],
+  "activeEditor": "script",
+  "markup": {
+    "language": "html",
+    "content": "<!DOCTYPE html>\r\n<html lang=\"id\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <title>Steal the Brainrot - Pro Edition</title>\r\n    <link rel=\"stylesheet\" href=\"style.css\">\r\n</head>\r\n<body>\r\n    <div class=\"game-container\">\r\n        <h1>Steal the Brainrot 🧠</h1>\r\n        \r\n        <div class=\"stats\">\r\n            <p>Skor: <span id=\"score\">0</span></p>\r\n            <p>Waktu: <span id=\"timer\">20</span>s</p>\r\n            <p style=\"color: #00ff00;\">Rekor Tertinggi: <span id=\"high-score\">0</span></p>\r\n        </div>\r\n\r\n        <div id=\"game-board\"></div>\r\n\r\n        <div class=\"controls\">\r\n            <button id=\"start-btn\">Mulai Curi!</button>\r\n            <button id=\"pause-btn\" disabled>Pause</button>\r\n            <button id=\"save-btn\">Simpan Skor</button>\r\n        </div>\r\n    </div>\r\n    <script src=\"script.js\"></script>\r\n</body>\r\n</html>"
+  },
+  "style": {
+    "language": "css",
+    "content": "body {\r\n    background-color: #1a1a1a;\r\n    color: white;\r\n    font-family: Arial, sans-serif;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    height: 100vh;\r\n    margin: 0;\r\n}\r\n\r\n.game-container {\r\n    background: #333;\r\n    padding: 20px;\r\n    border: 3px solid #00ff00;\r\n    border-radius: 15px;\r\n    text-align: center;\r\n    width: 450px;\r\n}\r\n\r\n#game-board {\r\n    width: 400px;\r\n    height: 400px;\r\n    background: black;\r\n    position: relative;\r\n    margin: 20px auto;\r\n    border-radius: 5px;\r\n    overflow: hidden;\r\n}\r\n\r\n.target {\r\n    position: absolute;\r\n    font-size: 40px;\r\n    cursor: pointer;\r\n    user-select: none;\r\n}\r\n\r\n.controls {\r\n    display: flex;\r\n    gap: 10px;\r\n    justify-content: center;\r\n}\r\n\r\nbutton {\r\n    padding: 8px 12px;\r\n    cursor: pointer;\r\n    border: none;\r\n    border-radius: 4px;\r\n    font-weight: bold;\r\n}\r\n\r\n#start-btn { background: white; color: black; }\r\n#pause-btn { background: #777; color: white; }\r\n#save-btn { background: #00ff00; color: black; }\r\n\r\nbutton:disabled {\r\n    opacity: 0.5;\r\n    cursor: not-allowed;\r\n}"
+  },
+  "script": {
+    "language": "javascript",
+    "content": "const board = document.getElementById('game-board');\r\nconst scoreEl = document.getElementById('score');\r\nconst timerEl = document.getElementById('timer');\r\nconst highScoreEl = document.getElementById('high-score');\r\nconst startBtn = document.getElementById('start-btn');\r\nconst pauseBtn = document.getElementById('pause-btn');\r\nconst saveBtn = document.getElementById('save-btn');\r\n\r\nlet score = 0;\r\nlet timeLeft = 20;\r\nlet gameActive = false;\r\nlet isPaused = false;\r\nlet gameInterval, timerInterval;\r\n\r\nconst items = ['💀', '🔥', '🍷', '🗿', '🤌'];\r\n\r\n// Ambil High Score yang tersimpan saat pertama kali dibuka\r\nlet savedHighScore = localStorage.getItem('brainrotHighScore') || 0;\r\nhighScoreEl.innerText = savedHighScore;\r\n\r\nfunction createTarget() {\r\n    if (!gameActive || isPaused) return;\r\n\r\n    const target = document.createElement('div');\r\n    target.classList.add('target');\r\n    target.innerText = items[Math.floor(Math.random() * items.length)];\r\n\r\n    const x = Math.random() * (board.clientWidth - 50);\r\n    const y = Math.random() * (board.clientHeight - 50);\r\n\r\n    target.style.left = `${x}px`;\r\n    target.style.top = `${y}px`;\r\n\r\n    target.onclick = () => {\r\n        if (!isPaused) {\r\n            score++;\r\n            scoreEl.innerText = score;\r\n            target.remove();\r\n        }\r\n    };\r\n\r\n    board.appendChild(target);\r\n\r\n    setTimeout(() => {\r\n        if (target.parentNode && !isPaused) target.remove();\r\n    }, 1000);\r\n}\r\n\r\nfunction startGame() {\r\n    score = 0;\r\n    timeLeft = 20;\r\n    gameActive = true;\r\n    isPaused = false;\r\n    scoreEl.innerText = score;\r\n    timerEl.innerText = timeLeft;\r\n    board.innerHTML = \"\";\r\n    board.style.opacity = \"1\";\r\n    \r\n    startBtn.disabled = true;\r\n    pauseBtn.disabled = false;\r\n    pauseBtn.innerText = \"Pause\";\r\n\r\n    runLogic();\r\n}\r\n\r\nfunction runLogic() {\r\n    gameInterval = setInterval(createTarget, 700);\r\n    timerInterval = setInterval(() => {\r\n        if (!isPaused) {\r\n            timeLeft--;\r\n            timerEl.innerText = timeLeft;\r\n            if (timeLeft <= 0) endGame();\r\n        }\r\n    }, 1000);\r\n}\r\n\r\nfunction togglePause() {\r\n    if (!gameActive) return;\r\n    if (!isPaused) {\r\n        isPaused = true;\r\n        clearInterval(gameInterval);\r\n        clearInterval(timerInterval);\r\n        pauseBtn.innerText = \"Lanjut\";\r\n        board.style.opacity = \"0.3\";\r\n    } else {\r\n        isPaused = false;\r\n        pauseBtn.innerText = \"Pause\";\r\n        board.style.opacity = \"1\";\r\n        runLogic();\r\n    }\r\n}\r\n\r\nfunction saveScore() {\r\n    // Logika simpan skor tertinggi\r\n    if (score > savedHighScore) {\r\n        savedHighScore = score;\r\n        localStorage.setItem('brainrotHighScore', savedHighScore);\r\n        highScoreEl.innerText = savedHighScore;\r\n        alert(\"Gila! Rekor baru tersimpan: \" + savedHighScore);\r\n    } else {\r\n        alert(\"Skor kamu masih cupu, belum bisa kalahkan rekor: \" + savedHighScore);\r\n    }\r\n}\r\n\r\nfunction endGame() {\r\n    clearInterval(gameInterval);\r\n    clearInterval(timerInterval);\r\n    gameActive = false;\r\n    startBtn.disabled = false;\r\n    pauseBtn.disabled = true;\r\n    alert(\"Waktu Habis! Skor kamu: \" + score + \". Jangan lupa tekan Simpan Skor!\");\r\n}\r\n\r\nstartBtn.addEventListener('click', startGame);\r\npauseBtn.addEventListener('click', togglePause);\r\nsaveBtn.addEventListener('click', saveScore);"
+  },
+  "stylesheets": [],
+  "scripts": [],
+  "cssPreset": "",
+  "processors": [],
+  "customSettings": {},
+  "imports": {},
+  "types": {},
+  "tests": {
+    "language": "typescript",
+    "content": ""
+  },
+  "version": "48"
+}
