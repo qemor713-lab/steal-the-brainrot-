@@ -1,20 +1,18 @@
 const board = document.getElementById('game-board');
 const scoreEl = document.getElementById('score');
-const timerEl = document.getElementById('timer');
 const highScoreEl = document.getElementById('high-score');
 const startBtn = document.getElementById('start-btn');
 const pauseBtn = document.getElementById('pause-btn');
-const saveBtn = document.getElementById('save-btn');
+const stopBtn = document.getElementById('stop-btn');
 
 let score = 0;
-let timeLeft = 20;
 let gameActive = false;
 let isPaused = false;
-let gameInterval, timerInterval;
+let gameInterval;
 
-const items = ['💀', '🔥', '🍷', '🗿', '🤌'];
+const items = ['💀', '🔥', '🍷', '🗿', '🤌', '😡'];
 
-// Ambil High Score yang tersimpan saat pertama kali dibuka
+// Ambil rekor tertinggi dari memori browser
 let savedHighScore = localStorage.getItem('brainrotHighScore') || 0;
 highScoreEl.innerText = savedHighScore;
 
@@ -41,37 +39,27 @@ function createTarget() {
 
     board.appendChild(target);
 
+    // Target hilang otomatis setelah 1.2 detik (lebih santai)
     setTimeout(() => {
         if (target.parentNode && !isPaused) target.remove();
-    }, 1000);
+    }, 1200);
 }
 
 function startGame() {
     score = 0;
-    timeLeft = 20;
     gameActive = true;
     isPaused = false;
     scoreEl.innerText = score;
-    timerEl.innerText = timeLeft;
     board.innerHTML = "";
     board.style.opacity = "1";
     
     startBtn.disabled = true;
     pauseBtn.disabled = false;
+    stopBtn.disabled = false;
     pauseBtn.innerText = "Pause";
 
-    runLogic();
-}
-
-function runLogic() {
-    gameInterval = setInterval(createTarget, 700);
-    timerInterval = setInterval(() => {
-        if (!isPaused) {
-            timeLeft--;
-            timerEl.innerText = timeLeft;
-            if (timeLeft <= 0) endGame();
-        }
-    }, 1000);
+    // Jalankan kemunculan item tanpa batas waktu
+    gameInterval = setInterval(createTarget, 800);
 }
 
 function togglePause() {
@@ -79,38 +67,36 @@ function togglePause() {
     if (!isPaused) {
         isPaused = true;
         clearInterval(gameInterval);
-        clearInterval(timerInterval);
         pauseBtn.innerText = "Lanjut";
         board.style.opacity = "0.3";
     } else {
         isPaused = false;
         pauseBtn.innerText = "Pause";
         board.style.opacity = "1";
-        runLogic();
+        gameInterval = setInterval(createTarget, 800);
     }
 }
 
-function saveScore() {
-    // Logika simpan skor tertinggi
+function stopAndSave() {
+    // Hentikan game secara manual
+    clearInterval(gameInterval);
+    gameActive = false;
+    startBtn.disabled = false;
+    pauseBtn.disabled = true;
+    stopBtn.disabled = true;
+
+    // Cek rekor baru
     if (score > savedHighScore) {
         savedHighScore = score;
         localStorage.setItem('brainrotHighScore', savedHighScore);
         highScoreEl.innerText = savedHighScore;
-        alert("Gila! Rekor baru tersimpan: " + savedHighScore);
+        alert("REKOR BARU! Kamu mencuri " + score + " item.");
     } else {
-        alert("Skor kamu masih cupu, belum bisa kalahkan rekor: " + savedHighScore);
+        alert("Game Berhenti. Skor kamu: " + score);
     }
-}
-
-function endGame() {
-    clearInterval(gameInterval);
-    clearInterval(timerInterval);
-    gameActive = false;
-    startBtn.disabled = false;
-    pauseBtn.disabled = true;
-    alert("Waktu Habis! Skor kamu: " + score + ". Jangan lupa tekan Simpan Skor!");
+    board.innerHTML = "";
 }
 
 startBtn.addEventListener('click', startGame);
 pauseBtn.addEventListener('click', togglePause);
-saveBtn.addEventListener('click', saveScore);
+stopBtn.addEventListener('click', stopAndSave);
