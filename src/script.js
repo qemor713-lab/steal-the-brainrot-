@@ -4,13 +4,18 @@ const highScoreEl = document.getElementById('high-score');
 const startBtn = document.getElementById('start-btn');
 const pauseBtn = document.getElementById('pause-btn');
 const stopBtn = document.getElementById('stop-btn');
+const bgm = document.getElementById('bgm'); // Untuk lagu kamu
 
 let score = 0;
 let gameActive = false;
 let isPaused = false;
 let gameInterval;
+let savedHighScore = localStorage.getItem('brainrotHighScore') || 0;
 
-// Daftar item dengan poin masing-masing
+// Papar rekor lama
+highScoreEl.innerText = savedHighScore;
+
+// Daftar item dengan emoji iblis 61239
 const brainrotItems = [
     { emoji: '💀', poin: 1 },
     { emoji: '🔥', poin: 5 },
@@ -18,11 +23,9 @@ const brainrotItems = [
     { emoji: '🗿', poin: 20 },
     { emoji: '🤌', poin: 50 },
     { emoji: '🧠', poin: 67 },
+    { emoji: '😈', poin: 61239 }, // Raja Poin tetap ada!
+    { emoji: '🤯', poin: -1231 },
 ];
-
-// Load Rekor Tertinggi dari memori browser
-let savedHighScore = localStorage.getItem('brainrotHighScore') || 0;
-highScoreEl.innerText = savedHighScore;
 
 function createTarget() {
     if (!gameActive || isPaused) return;
@@ -30,19 +33,18 @@ function createTarget() {
     const target = document.createElement('div');
     target.classList.add('target');
 
-    // Pilih data acak (emoji + poin)
     const randomData = brainrotItems[Math.floor(Math.random() * brainrotItems.length)];
     target.innerText = randomData.emoji;
 
-    // Hitung posisi acak
-    const x = Math.random() * (board.clientWidth - 55);
-    const y = Math.random() * (board.clientHeight - 55);
+    // Posisi acak
+    const x = Math.random() * (board.clientWidth - 60);
+    const y = Math.random() * (board.clientHeight - 60);
     target.style.left = `${x}px`;
     target.style.top = `${y}px`;
 
-    // Klik untuk dapat poin
+    // Klik dapat poin
     target.onclick = () => {
-        if (!isPaused) {
+        if (!isPaused && gameActive) {
             score += randomData.poin;
             scoreEl.innerText = score;
             target.remove();
@@ -51,43 +53,45 @@ function createTarget() {
 
     board.appendChild(target);
 
-    // Hilang sendiri jika tidak diklik
+    // Emoji hilang sendiri kalau tak diklik
     setTimeout(() => {
-        if (target.parentNode && !isPaused) {
-            target.remove();
-        }
-    }, 1100);
+        if (target.parentNode && !isPaused) target.remove();
+    }, 1200);
 }
 
 function startGame() {
     score = 0;
+    scoreEl.innerText = score;
     gameActive = true;
     isPaused = false;
-    scoreEl.innerText = score;
     board.innerHTML = "";
-    board.style.opacity = "1";
     
     startBtn.disabled = true;
     pauseBtn.disabled = false;
     stopBtn.disabled = false;
-    pauseBtn.innerText = "Pause";
 
+    // Lagu mula bunyi
+    if(bgm) {
+        bgm.currentTime = 0;
+        bgm.play();
+    }
+
+    // TERUS MULA (Tak ada loading lagi)
     gameInterval = setInterval(createTarget, 800);
 }
 
 function togglePause() {
     if (!gameActive) return;
-
     if (!isPaused) {
         isPaused = true;
         clearInterval(gameInterval);
         pauseBtn.innerText = "Lanjut";
-        board.style.opacity = "0.3";
+        if(bgm) bgm.pause();
     } else {
         isPaused = false;
         pauseBtn.innerText = "Pause";
-        board.style.opacity = "1";
         gameInterval = setInterval(createTarget, 800);
+        if(bgm) bgm.play();
     }
 }
 
@@ -98,17 +102,21 @@ function stopAndSave() {
     pauseBtn.disabled = true;
     stopBtn.disabled = true;
 
+    // Lagu berhenti
+    if(bgm) bgm.pause();
+
     if (score > savedHighScore) {
         savedHighScore = score;
         localStorage.setItem('brainrotHighScore', savedHighScore);
         highScoreEl.innerText = savedHighScore;
-        alert("REKOR BARU! Berhasil disimpan: " + savedHighScore);
+        alert("REKOR BARU: " + score);
     } else {
         alert("Selesai! Skor kamu: " + score);
     }
     board.innerHTML = "";
 }
 
+// Pasang butang
 startBtn.addEventListener('click', startGame);
 pauseBtn.addEventListener('click', togglePause);
 stopBtn.addEventListener('click', stopAndSave);
