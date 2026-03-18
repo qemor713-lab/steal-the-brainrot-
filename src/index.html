@@ -1,17 +1,27 @@
-<div class="game-container">
-    <h1>Steal the Brainrot 🧠</h1>
-    <p>(Mode Tanpa Batas)</p>
-    
-    <div class="stats">
-        <p>Skor Saat Ini: <span id="score">0</span></p>
-        <p style="color: #00ff00;">Rekor Tertinggi: <span id="high-score">0</span></p>
-    </div>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steal the Brainrot - Infinite Mode</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>Steal the Brainrot 🧠</h1>
+        <div class="stats">
+            <p>Skor: <b id="score">0</b></p>
+            <p>Rekor Tertinggi: <span id="high-score">0</span></p>
+        </div>
 
-    <div id="game-board"></div>
+        <div id="game-board"></div>
 
-    <div class="controls">
-        <button id="start-btn">Mulai</button>
-        <button id="pause-btn" disabled>Pause</button>
-        <button id="stop-btn" disabled>Berhenti & Simpan</button>
+        <div class="controls">
+            <button id="start-btn">Main</button>
+            <button id="pause-btn" disabled>Pause</button>
+            <button id="stop-btn" disabled>Simpan Skor</button>
+        </div>
     </div>
-</div>
+    <script src="script.js"></script>
+</body>
+</html>

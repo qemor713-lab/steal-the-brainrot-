@@ -10,9 +10,17 @@ let gameActive = false;
 let isPaused = false;
 let gameInterval;
 
-const items = ['💀', '🔥', '🍷', '🗿', '🤌', '😡'];
+// Daftar item dengan poin masing-masing
+const brainrotItems = [
+    { emoji: '💀', poin: 1 },
+    { emoji: '🔥', poin: 5 },
+    { emoji: '🍷', poin: 10 },
+    { emoji: '🗿', poin: 20 },
+    { emoji: '🤌', poin: 50 },
+    { emoji: '🧠', poin: 67 },
+];
 
-// Ambil rekor tertinggi dari memori browser
+// Load Rekor Tertinggi dari memori browser
 let savedHighScore = localStorage.getItem('brainrotHighScore') || 0;
 highScoreEl.innerText = savedHighScore;
 
@@ -21,17 +29,21 @@ function createTarget() {
 
     const target = document.createElement('div');
     target.classList.add('target');
-    target.innerText = items[Math.floor(Math.random() * items.length)];
 
-    const x = Math.random() * (board.clientWidth - 50);
-    const y = Math.random() * (board.clientHeight - 50);
+    // Pilih data acak (emoji + poin)
+    const randomData = brainrotItems[Math.floor(Math.random() * brainrotItems.length)];
+    target.innerText = randomData.emoji;
 
+    // Hitung posisi acak
+    const x = Math.random() * (board.clientWidth - 55);
+    const y = Math.random() * (board.clientHeight - 55);
     target.style.left = `${x}px`;
     target.style.top = `${y}px`;
 
+    // Klik untuk dapat poin
     target.onclick = () => {
         if (!isPaused) {
-            score++;
+            score += randomData.poin;
             scoreEl.innerText = score;
             target.remove();
         }
@@ -39,10 +51,12 @@ function createTarget() {
 
     board.appendChild(target);
 
-    // Target hilang otomatis setelah 1.2 detik (lebih santai)
+    // Hilang sendiri jika tidak diklik
     setTimeout(() => {
-        if (target.parentNode && !isPaused) target.remove();
-    }, 1200);
+        if (target.parentNode && !isPaused) {
+            target.remove();
+        }
+    }, 1100);
 }
 
 function startGame() {
@@ -58,12 +72,12 @@ function startGame() {
     stopBtn.disabled = false;
     pauseBtn.innerText = "Pause";
 
-    // Jalankan kemunculan item tanpa batas waktu
     gameInterval = setInterval(createTarget, 800);
 }
 
 function togglePause() {
     if (!gameActive) return;
+
     if (!isPaused) {
         isPaused = true;
         clearInterval(gameInterval);
@@ -78,21 +92,19 @@ function togglePause() {
 }
 
 function stopAndSave() {
-    // Hentikan game secara manual
     clearInterval(gameInterval);
     gameActive = false;
     startBtn.disabled = false;
     pauseBtn.disabled = true;
     stopBtn.disabled = true;
 
-    // Cek rekor baru
     if (score > savedHighScore) {
         savedHighScore = score;
         localStorage.setItem('brainrotHighScore', savedHighScore);
         highScoreEl.innerText = savedHighScore;
-        alert("REKOR BARU! Kamu mencuri " + score + " item.");
+        alert("REKOR BARU! Berhasil disimpan: " + savedHighScore);
     } else {
-        alert("Game Berhenti. Skor kamu: " + score);
+        alert("Selesai! Skor kamu: " + score);
     }
     board.innerHTML = "";
 }
