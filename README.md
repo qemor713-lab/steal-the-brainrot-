@@ -1,2 +1,0 @@
-# Steal the Brainrot 🧠
-A [project](https://livecodes.io/?x=https://github.com/qemor713-lab/steal-the-brainrot-/tree/gh-pages/src) created by [qemor713-lab](https://github.com/qemor713-lab) on [LiveCodes](https://livecodes.io).
