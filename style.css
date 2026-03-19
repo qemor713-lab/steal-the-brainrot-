@@ -1,7 +1,7 @@
 body {
     background-color: #1a1a1a;
     color: white;
-    font-family: Arial, sans-serif;
+    font-family: sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,67 +10,72 @@ body {
 }
 
 .game-container {
-    background: #333;
-    padding: 20px;
-    border: 3px solid #00ff00;
-    border-radius: 15px;
     text-align: center;
-    width: 420px;
+    width: 90%;
+    max-width: 500px;
 }
 
 #game-board {
-    width: 400px;
-    height: 400px;
-    background: black;
+    width: 100%;
+    height: 300px; /* TINGGI MAP ASAL */
+    background-color: #000; /* WARNA MAP HITAM */
+    border: 2px solid #444;
     position: relative;
-    margin: 20px auto;
-    border-radius: 8px;
+    margin: 20px 0;
     overflow: hidden;
-    border: 1px solid #444;
+    border-radius: 10px;
 }
 
 .target {
     position: absolute;
-    font-size: 45px;
+    font-size: 40px;
     cursor: pointer;
     user-select: none;
-    transition: transform 0.1s;
 }
 
-.target:active {
-    transform: scale(0.8);
-}
-
-.controls {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-}
-
-button {
-    padding: 10px 15px;
+.controls button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 5px;
     cursor: pointer;
-    border: none;
     border-radius: 5px;
-    font-weight: bold;
+    border: none;
 }
 
-#start-btn { background: white; color: black; }
-#pause-btn { background: #ffcc00; color: black; }
-#stop-btn { background: #00ff00; color: black; }
+#start-btn { background-color: #28a745; color: white; }
+#pause-btn { background-color: #fb0000; color: white; }
+#stop-btn { background-color: #9a8282; color: white; }
 
-button:disabled {
-    background: #555;
-    color: #888;
-    cursor: not-allowed;
+.stats p {
+    font-size: 18px;
+    margin: 5px 0;
 }
+
 
 #high-score {
-    color: #00ff00;
+    color: #ccffcc;
+    font-weight: bold;
+    text-shadow: 0 0 25px #00ff00; 
 }
 
-#score {
-    color: #00ff00;
-    text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
-    font-size: 1.5em;
+h1 {
+    color: #ffcccc; /* Warna inti merah biar nampak menyala */
+    font-size: 35px; /* Saiz tulisan besar sikit */
+    font-weight: bold;
+    margin-bottom: 10px;
+    
+    /* CAHAYA PALING BESAR (BLUR 30PX) */
+    text-shadow: 0 0 30px rgb(255, 0, 0); 
+}
+
+#share-btn {
+    background-color: #007bff; /* Warna biru */
+    color: white;
+    box-shadow: 0 0 15px #007bff; /* Cahaya biru sikit kat butang */
+    cursor: pointer;
+}
+
+#share-btn:hover {
+    background-color: #0056b3;
+    box-shadow: 0 0 25px #007bff; /* Cahaya jadi besar bila letak mouse */
 }
