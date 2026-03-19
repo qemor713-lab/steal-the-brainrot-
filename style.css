@@ -1,81 +1,154 @@
+/* 1. TEMA GLOBAL */
 body {
     background-color: #1a1a1a;
     color: white;
-    font-family: sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
+    overflow: hidden; /* Tutup scroll masa loading */
 }
 
+/* 2. LOADING SCREEN (0% - 500%) */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease;
+}
+
+.loader-content {
+    text-align: center;
+}
+
+#loading-text {
+    font-size: 80px;
+    color: #00ff00;
+    text-shadow: 0 0 20px #00ff00;
+    margin: 0;
+}
+
+.progress-bar {
+    width: 300px;
+    height: 20px;
+    background: #222;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid #00ff00;
+    margin-top: 20px;
+}
+
+#progress-fill {
+    width: 0%;
+    height: 100%;
+    background: #00ff00;
+    box-shadow: 0 0 15px #00ff00;
+}
+
+/* 3. GAME CONTAINER */
 .game-container {
     text-align: center;
     width: 90%;
     max-width: 500px;
+    display: none; /* Akan ditukar ke block oleh JS */
 }
 
 #game-board {
     width: 100%;
-    height: 300px; /* TINGGI MAP ASAL */
-    background-color: #000; /* WARNA MAP HITAM */
-    border: 2px solid #444;
+    height: 300px;
+    background-color: #000;
+    border: 2px solid #333;
     position: relative;
     margin: 20px 0;
-    overflow: hidden;
     border-radius: 10px;
 }
 
-.target {
-    position: absolute;
-    font-size: 40px;
-    cursor: pointer;
-    user-select: none;
+/* 4. SUSUNAN BUTANG ASAL (MACAM GAMBAR KAU) */
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; /* Supaya butang share boleh turun bawah kalau sempit */
+    gap: 10px;
 }
 
 .controls button {
-    padding: 10px 20px;
-    font-size: 16px;
-    margin: 5px;
+    padding: 10px 15px;
+    font-size: 14px;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 8px; /* Ada lengkuk sikit macam gambar kau */
     border: none;
-}
-
-#start-btn { background-color: #28a745; color: white; }
-#pause-btn { background-color: #fb0000; color: white; }
-#stop-btn { background-color: #9a8282; color: white; }
-
-.stats p {
-    font-size: 18px;
-    margin: 5px 0;
-}
-
-
-#high-score {
-    color: #ccffcc;
     font-weight: bold;
-    text-shadow: 0 0 25px #00ff00; 
-}
-
-h1 {
-    color: #ffcccc; /* Warna inti merah biar nampak menyala */
-    font-size: 35px; /* Saiz tulisan besar sikit */
-    font-weight: bold;
-    margin-bottom: 10px;
-    
-    /* CAHAYA PALING BESAR (BLUR 30PX) */
-    text-shadow: 0 0 30px rgb(255, 0, 0); 
-}
-
-#share-btn {
-    background-color: #007bff; /* Warna biru */
     color: white;
-    box-shadow: 0 0 15px #007bff; /* Cahaya biru sikit kat butang */
+    transition: 0.2s;
+}
+
+/* Ikut warna dalam gambar kau */
+#start-btn { background-color: #00ff1e; } /* Hijau Gelap */
+#pause-btn { background-color: #ffc107; color: black; } /* Kuning */
+#stop-btn { background-color: #d32f2f; } /* Merah */
+
+/* Butang Share Biru Terang & Glow */
+#share-btn { 
+    background-color: #007bff; 
+    box-shadow: 0 0 15px #007bff;
+    margin-top: 5px;
+    min-width: 180px; /* Biar nampak lebar sikit kat bawah */
+}
+
+/* EMOJI */
+.target {
+    position: absolute;
+    font-size: 45px;
     cursor: pointer;
 }
 
-#share-btn:hover {
-    background-color: #0056b3;
-    box-shadow: 0 0 25px #007bff; /* Cahaya jadi besar bila letak mouse */
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* KESAN CAHAYA PADA REKOR TERBESAR */
+#high-score {
+    color: #00ff00; /* Warna hijau terang */
+    font-weight: bold;
+    /* Ini rahsia cahaya tu (Glow) */
+    text-shadow: 
+        0 0 5px #00ff00, 
+        0 0 10px #00ff00, 
+        0 0 20px #00ff00;
+    
+    /* Tambah animasi sikit biar dia berkelip slow-slow */
+    animation: glow-pulse 2s infinite alternate;
+}
+
+/* ANIMASI BIAR CAHAYA TU HIDUP */
+@keyframes glow-pulse {
+    from {
+        text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00;
+    }
+    to {
+        text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00;
+    }
+}
+
+/* Khas untuk Emoji Power Button */
+.target:contains('⏻') {
+    color: #ff0000;
+    text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000;
+    animation: power-pulse 0.5s infinite alternate;
+}
+
+@keyframes power-pulse {
+    from { transform: scale(1); opacity: 1; }
+    to { transform: scale(1.3); opacity: 0.8; }
 }

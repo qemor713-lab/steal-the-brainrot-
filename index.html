@@ -7,15 +7,28 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Steal the Brainrot</title>
+    <title>Steal the Brainrot 🧠 - 500% Update</title>
+    
     <link rel="stylesheet" href="style.css">
 
 
+
+    <div id="loading-screen">
+        <div class="loader-content">
+            <h1 id="loading-text">0%</h1>
+            <div class="progress-bar">
+                <div id="progress-fill"></div>
+            </div>
+            <p>Wait For moment</p>
+        </div>
+    </div>
+
     <div class="game-container">
         <h1>Steal the Brainrot 🧠</h1>
+        
         <div class="stats">
-            <p>Skor: <b id="score">0</b></p>
-            <p>Rekor Tertinggi: <span id="high-score">0</span></p>
+            <p>Skor: <span id="score">0</span></p>
+            <p>Rekor tertinggi: <span id="high-score">0</span></p>
         </div>
 
         <div id="game-board"></div>
@@ -23,10 +36,11 @@
         <div class="controls">
             <button id="start-btn">Main</button>
             <button id="pause-btn" disabled="">Pause</button>
-            <button id="stop-btn" disabled="">Simpan Skor</button>
-            <button id="share-btn">Share</button> 
+            <button id="stop-btn" disabled="">Simpan &amp; point</button>
+            <button id="share-btn">Share Link Game</button>
         </div>
     </div>
+    
     <script src="script.js"></script>
 
 <script src="./script.js" type="module"></script></body></html>

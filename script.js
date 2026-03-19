@@ -1,3 +1,33 @@
+// --- 1. LOGIK LOADING SCREEN (0% - 500%) ---
+window.onload = () => {
+    const loadingText = document.getElementById('loading-text');
+    const progressFill = document.getElementById('progress-fill');
+    const loadingScreen = document.getElementById('loading-screen');
+    const gameContainer = document.querySelector('.game-container');
+    
+    let percentage = 0;
+
+    const interval = setInterval(() => {
+        percentage += 5; 
+        
+        loadingText.innerText = percentage + "%";
+        progressFill.style.width = (percentage / 5) + "%"; 
+
+        if (percentage >= 500) {
+            clearInterval(interval);
+            
+            setTimeout(() => {
+                loadingScreen.style.opacity = "0";
+                setTimeout(() => {
+                    loadingScreen.style.display = "none";
+                    gameContainer.style.display = "block"; // Tunjuk game lepas loading
+                }, 500);
+            }, 500);
+        }
+    }, 40); 
+};
+
+// --- 2. LOGIK GAME BRAINROT (MUNCUL SATU-SATU) ---
 const board = document.getElementById('game-board');
 const scoreEl = document.getElementById('score');
 const highScoreEl = document.getElementById('high-score');
@@ -9,34 +39,35 @@ const shareBtn = document.getElementById('share-btn');
 let score = 0;
 let gameActive = false;
 let isPaused = false;
-let gameInterval;
+let timeoutId; 
 
-// Ambil rekod lama dari browser
 let savedHighScore = localStorage.getItem('brainrotHighScore') || 0;
 highScoreEl.innerText = savedHighScore;
 
-// Senarai Emoji & Poin (Ikut gambar kau bagi)
 const brainrotItems = [
-    { emoji: '💀', poin: 1 },
-    { emoji: '🔥', poin: 5 },
-    { emoji: '🍷', poin: 10 },
-    { emoji: '🗿', poin: 20 },
-    { emoji: '🤌', poin: 50 },
-    { emoji: '🧠', poin: 67 },
-    { emoji: '😈', poin: 61239 },
-    { emoji: '🤯', poin: -4332 },
-    { emoji: '💱', poin: 9999999 }
+    { emoji: '💀', poin: 1, nama: 'Skulled' },
+    { emoji: '🔥', poin: 5, nama: 'Lit!' },
+    { emoji: '🍷', poin: 10, nama: 'Sigma' },
+    { emoji: '🗿', poin: 20, nama: 'Mewing' },
+    { emoji: '👌', poin: 50, nama: 'Gotcha' },
+    { emoji: '🧠', poin: 67, nama: 'Brainrot' },
+    { emoji: '😈', poin: 61239, nama: 'Demon Mode' },
+    { emoji: '🤯', poin: -4332, nama: 'Mind Blown' },
+    { emoji: '💱', poin: 9999, nama: 'Rich Guy' },
+    { emoji: '🫀', poin: 452233, nama: 'Gold!' },
+    { emoji: '🎗️', poin: 2231312, nama: 'secret item' },
 ];
 
 function createTarget() {
     if (!gameActive || isPaused) return;
+
+    board.innerHTML = ""; // Pastikan cuma ada satu emoji
 
     const target = document.createElement('div');
     target.classList.add('target');
     const data = brainrotItems[Math.floor(Math.random() * brainrotItems.length)];
     target.innerText = data.emoji;
 
-    // Kedudukan rawak dalam map
     const x = Math.random() * (board.clientWidth - 55);
     const y = Math.random() * (board.clientHeight - 55);
     target.style.left = x + 'px';
@@ -46,16 +77,35 @@ function createTarget() {
         if (!isPaused && gameActive) {
             score += data.poin;
             scoreEl.innerText = score;
+
+            // Efek nama terapung
+            const nameTag = document.createElement('div');
+            nameTag.innerText = data.nama + " (+" + data.poin + ")";
+            nameTag.style.position = 'absolute';
+            nameTag.style.left = target.style.left;
+            nameTag.style.top = target.style.top;
+            nameTag.style.color = '#00ff00';
+            nameTag.style.fontWeight = 'bold';
+            nameTag.style.pointerEvents = 'none';
+            board.appendChild(nameTag);
+            setTimeout(() => { nameTag.remove(); }, 600);
+
             target.remove();
+            
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(createTarget, 500); // Tunggu kejap baru muncul baru
         }
     };
 
     board.appendChild(target);
     
-    // Emoji hilang lepas 3 saat (macam kau nak)
-    setTimeout(() => {
-        if (target.parentNode && !isPaused) target.remove();
-    }, 3000);
+    // Kalau tak kena klik dalam 2.5 saat, tukar emoji lain
+    timeoutId = setTimeout(() => {
+        if (target.parentNode && !isPaused) {
+            target.remove();
+            createTarget();
+        }
+    }, 2500);
 }
 
 function startGame() {
@@ -67,29 +117,28 @@ function startGame() {
     startBtn.disabled = true;
     pauseBtn.disabled = false;
     stopBtn.disabled = false;
-    gameInterval = setInterval(createTarget, 800);
+    createTarget();
 }
 
 function togglePause() {
     if (!gameActive) return;
     if (!isPaused) {
         isPaused = true;
-        clearInterval(gameInterval);
+        clearTimeout(timeoutId);
         pauseBtn.innerText = "Lanjut";
     } else {
         isPaused = false;
         pauseBtn.innerText = "Pause";
-        gameInterval = setInterval(createTarget, 800);
+        createTarget();
     }
 }
 
 function stopAndSave() {
-    clearInterval(gameInterval);
+    clearTimeout(timeoutId);
     gameActive = false;
     startBtn.disabled = false;
     pauseBtn.disabled = true;
     stopBtn.disabled = true;
-    
     if (score > savedHighScore) {
         savedHighScore = score;
         localStorage.setItem('brainrotHighScore', savedHighScore);
@@ -98,29 +147,19 @@ function stopAndSave() {
     board.innerHTML = "";
 }
 
-// FUNGSI SHARE PALING PADU
+// --- 3. LOGIK SHARE LINK ---
 shareBtn.onclick = async () => {
     const shareData = {
         title: 'Steal the Brainrot',
-        text: 'Jom main game Brainrot paling padu ni! Kumpul poin sampai 9.9 Juta!',
+        text: 'Jom main game Brainrot paling padu ni!',
         url: 'https://qemor713-lab.github.io/steal-the-brainrot-/'
     };
-
     try {
-        if (navigator.share) {
-            await navigator.share(shareData);
-        } else {
-            // Kalau kat PC, dia akan copy link
-            await navigator.clipboard.writeText(shareData.url);
-            alert("Link Game sudah di-copy! Boleh paste dekat WhatsApp atau FB.");
-        }
-    } catch (err) {
-        // Backup kalau user cancel
-        alert("Link Game: " + shareData.url);
-    }
+        if (navigator.share) { await navigator.share(shareData); } 
+        else { await navigator.clipboard.writeText(shareData.url); alert("Link Copied!"); }
+    } catch (err) { alert("Link: " + shareData.url); }
 };
 
-// ATURAN BUTANG
 startBtn.onclick = startGame;
 pauseBtn.onclick = togglePause;
 stopBtn.onclick = stopAndSave;
