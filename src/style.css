@@ -152,3 +152,74 @@ button:disabled {
     from { transform: scale(1); opacity: 1; }
     to { transform: scale(1.3); opacity: 0.8; }
 }
+
+/* ==========================================
+   GAYA KHAS UNTUK ITEM RAHSIA (MISTERI)
+   ========================================== */
+#secret-item {
+    font-size: 80px; /* Buat dia gergasi */
+    color: #ffeb3b; /* Warna Emas untuk emoji sendiri (biar nampak 'high value') */
+    cursor: pointer;
+    position: absolute;
+    
+    /* 🔥 CAHAYA MERAH GERGASI (GLOW) */
+    text-shadow: 
+        0 0 10px #ff0000,   /* Cahaya halus merah */
+        0 0 20px #ff0000,   /* Cahaya merah lebar */
+        0 0 40px #ff0000,   /* Cahaya merah gergasi (ini yang buat besar tu) */
+        0 0 60px #ff0000;   /* Cahaya merah paling gergasi */
+    
+    /* Animasi 'Glow' Berdegup Bertenaga */
+    animation: secret-pulse 0.4s infinite alternate;
+}
+
+@keyframes secret-pulse {
+    from { 
+        transform: scale(1) rotate(0deg); 
+        text-shadow: 
+            0 0 10px #ff0000, 0 0 20px #ff0000, 
+            0 0 40px #ff0000, 0 0 60px #ff0000;
+        opacity: 1; 
+    }
+    to { 
+        transform: scale(1.1) rotate(5deg); 
+        text-shadow: 
+            0 0 15px #ff0000, 0 0 25px #ff0000, 
+            0 0 50px #ff0000, 0 0 80px #ff0000; /* Cahaya merah makin kembang masa pulse */
+        opacity: 0.9; 
+    }
+}
+
+/* --- GAYA EMOJI SCAM (PENIPU) --- */
+#scam-item {
+    font-size: 80px;
+    color: #e91e63; /* Pink/Ungu Bahaya */
+    cursor: pointer;
+    position: absolute;
+    /* Cahaya Ungu Penipu */
+    text-shadow: 
+        0 0 20px #9c27b0, 
+        0 0 40px #9c27b0, 
+        0 0 60px #4a148c;
+    animation: scam-pulse 0.3s infinite alternate;
+}
+
+@keyframes scam-pulse {
+    from { transform: scale(1); opacity: 1; }
+    to { transform: scale(1.1); opacity: 0.8; }
+}
+
+/* --- EFEK SKRIN BERGEGAR BILA KENA SCAM --- */
+.shake-effect {
+    animation: screen-shake 0.5s;
+    border: 10px solid red !important; /* Kelip merah kat tepi */
+}
+
+@keyframes screen-shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    50% { transform: translate(-1px, 2px) rotate(1deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    100% { transform: translate(1px, -2px) rotate(0deg); }
+}
