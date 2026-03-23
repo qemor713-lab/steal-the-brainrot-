@@ -57,10 +57,11 @@ const brainrotItems = [
     { emoji: '🤯', poin: -4332, nama: 'Mind Blown' },
     { emoji: '🐊', poin: 5000000000, nama: 'OG' },
     { emoji: '☻', poin: 9129833, nama: 'BG' }, // new brainrot
+    { emoji: '🫲6 7🫱', poin: 12736762, name: 'Free Score' }, // New Emoji brainrot free score
 ];
 
 const secretItem = { emoji: '🧿', poin: 888888, nama: 'SECRET ITEM!' };
-const scamItemData = { emoji: '👁️', poin: -500000, nama: 'SCAMMED!' };
+const scamItemData = { emoji: '👁️', poin: -500000000, nama: 'SCAMMED!' };
 
 // ==========================================
 // 3. FUNGSI VISUAL
