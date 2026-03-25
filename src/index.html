@@ -3,49 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The End of Brainrot - SteltheOwner</title>
+    <title>The Last Legacy - SteltheOwner</title>
     <style>
+        /* ==========================================
+           STYLE PENGAKHIRAN (EMOSIONAL)
+           ========================================== */
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
-            background: #000; color: #fff; font-family: 'Courier New', Courier, monospace;
-            overflow: hidden; display: flex; justify-content: center; align-items: center;
+            background: #000; color: #00FFFF; 
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden; display: flex; 
+            justify-content: center; align-items: center;
         }
 
-        /* Container Cerita */
+        #timer {
+            position: absolute; top: 20px; right: 20px;
+            font-size: 28px; color: #333; font-weight: bold;
+        }
+
         #story-container {
-            width: 80%; max-width: 800px; text-align: center;
+            width: 85%; max-width: 900px; text-align: center;
+            transition: all 1s ease;
         }
 
         #text-content {
-            font-size: 22px; line-height: 1.6; min-height: 200px;
-            text-shadow: 0 0 10px #00ff00;
+            font-size: 24px; line-height: 1.8; min-height: 150px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.12);
+            transition: opacity 1s ease-in-out;
         }
 
-        /* Logo Final */
+        /* SCREEN FINAL: LOGO & RELEASE */
         #final-screen {
-            display: none; opacity: 0; transition: opacity 2s;
-            text-align: center;
+            display: none; opacity: 0; text-align: center;
+            transition: opacity 3s ease;
         }
 
         .logo {
-            font-size: 60px; font-weight: 900; color: #fff;
+            font-size: 70px; font-weight: 900; color: #fff;
             text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            animation: heartbeat 3s infinite ease-in-out;
         }
 
         .release-date {
-            font-size: 28px; color: #ffeb3b; letter-spacing: 5px;
+            font-size: 30px; color: #ffeb3b; 
+            letter-spacing: 8px; font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 235, 59, 0.5);
         }
 
-        .status {
-            margin-top: 40px; color: red; font-size: 18px;
-            border: 2px solid red; padding: 10px; display: inline-block;
+        .status-box {
+            margin-top: 50px; padding: 15px 30px;
+            border: 3px solid red; color: red;
+            display: inline-block; font-size: 20px;
+            text-transform: uppercase; letter-spacing: 3px;
         }
 
-        /* Timer di bucu skrin */
-        #timer {
-            position: absolute; top: 20px; right: 20px;
-            font-size: 30px; color: #444;
+        /* ANIMASI JANTUNG (HEARTBEAT) */
+        @keyframes heartbeat {
+            0% { transform: scale(1); filter: brightness(100%); }
+            50% { transform: scale(1.05); filter: brightness(140%); }
+            100% { transform: scale(1); filter: brightness(100%); }
+        }
+
+        @keyframes fadeOutStory {
+            from { opacity: 1; }
+            to { opacity: 0; transform: scale(0.9); }
         }
     </style>
 </head>
@@ -54,17 +76,23 @@
     <div id="timer">0:00</div>
 
     <div id="story-container">
-        <div id="text-content"></div>
+        <div id="text-content">Memulakan memori terakhir...</div>
     </div>
 
     <div id="final-screen">
         <div class="logo">STEAL THE BRAINROT ⛓️⛓️</div>
-        <div class="release-date">RELEASED: 3 MARCH 2026</div>
-        <div class="status">GAME STATUS: OVER & LOCKED</div>
-        <p style="color: #666; margin-top: 20px;">Terima kasih daripada SteltheOwner.</p>
+        <div class="release-date">Over: 26 MARCH 2026</div>
+        <div class="status-box">GAME STATUS: OVER & LOCKED</div>
+        <p style="color: #444; margin-top: 30px; font-size: 14px;">
+            Dicipta dengan titik peluh oleh SteltheOwner.<br>
+            Tarikh Tamat: 26 Mac 2026.
+        </p>
     </div>
 
     <script>
+        // ==========================================
+        // DATA PENCERITAAN STELTHEOWNER
+        // ==========================================
         const textContent = document.getElementById('text-content');
         const timerEl = document.getElementById('timer');
         const finalScreen = document.getElementById('final-screen');
@@ -74,63 +102,71 @@
             "Segalanya bermula dengan satu impian...",
             "Mula-mula, HTML disusun satu persatu. Struktur yang kosong, tanpa nyawa.",
             "Kemudian datang CSS. Berjam-jam SteltheOwner duduk depan skrin...",
-            "Hanya untuk pastikan warna, kedudukan, dan cahaya merah 'Legend' itu sempurna.",
-            "Tapi cabaran sebenar adalah JavaScript.",
-            "Beribu baris kod, logik 'BigInt' yang pening, sistem VVIP 400 Billion...",
+            "Hanya untuk pastikan cahaya merah 'Legend' itu membara sempurna.",
+            "Tapi cabaran sebenar adalah JavaScript yang sangat rumit.",
             "Berapa kali ralat (error) muncul? Berapa kali rasa nak putus asa?",
-            "Namun, SteltheOwner tak berhenti. Game ini dibina dengan titik peluh sendiri.",
-            "Dari kosong sehingga menjadi sebuah empayar Brainrot.",
-            "Hari ini, 26 Mac 2026... Perjalanan ini sampai ke penghujungnya.",
-            "Kisah ini akan kekal dalam sejarah kod.",
+            "Namun, SteltheOwner tidak pernah berhenti. Kau lawan setiap ralat tu.",
+            "Game ini dibina dengan titik peluh dan kesabaran yang tinggi.",
+            "Hari ini, 26 Mac 2026... Perjalanan ini sampai ke pengakhirannya.",
+            "Kisah ini akan kekal dalam sejarah kod selamanya.",
+            "Selamat tinggal, Steal the Brainrot. Legasi SteltheOwner bermula sekarang.",
             "Masa sudah tamat."
         ];
 
         let storyIndex = 0;
         let seconds = 0;
 
-        // Fungsi Taip Text
-        function typeStory() {
+        // Fungsi Taip Automatik
+        function nextStory() {
             if (storyIndex < stories.length) {
                 textContent.style.opacity = 0;
                 setTimeout(() => {
                     textContent.innerText = stories[storyIndex];
-                    textContent.style.transition = "opacity 1s";
                     textContent.style.opacity = 1;
                     storyIndex++;
                 }, 1000);
             }
         }
 
-        // Timer & Control
-        const interval = setInterval(() => {
+        // Timer Logic (End at 0:59)
+        const gameClock = setInterval(() => {
             seconds++;
             let displaySec = seconds < 10 ? '0' + seconds : seconds;
             timerEl.innerText = `0:${displaySec}`;
 
-            // Tukar cerita setiap 4.5 saat
+            // Tukar cerita setiap 4.8 saat untuk muat 59 saat
             if (seconds % 5 === 0 && seconds < 55) {
-                typeStory();
+                nextStory();
             }
 
-            // MASA TAMAT: 0:59
+            // --- MOMENT OF TRUTH: 0:59 ---
             if (seconds >= 59) {
-                clearInterval(interval);
-                storyContainer.style.display = 'none';
-                timerEl.style.display = 'none';
+                clearInterval(gameClock);
                 
-                finalScreen.style.display = 'block';
-                setTimeout(() => {
-                    finalScreen.style.opacity = 1;
-                }, 100);
+                // Animasi Keluar
+                storyContainer.style.animation = "fadeOutStory 2s forwards";
+                timerEl.style.opacity = "0";
 
-                // LOCK GAME: Padam data dari LocalStorage terus!
-                localStorage.clear();
-                console.log("GAME LOCKED BY OWNER.");
+                setTimeout(() => {
+                    storyContainer.style.display = 'none';
+                    finalScreen.style.display = 'block';
+                    
+                    // Munculkan Logo Final
+                    setTimeout(() => {
+                        finalScreen.style.opacity = 1;
+                    }, 100);
+
+                    // PENGUNCIAN KEKAL: Padam semua data
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    console.log("SYSTEM: Game Locked by SteltheOwner.");
+                }, 2000);
             }
         }, 1000);
 
         // Mula cerita pertama
-        typeStory();
+        setTimeout(nextStory, 1000);
+
     </script>
 </body>
 </html>
